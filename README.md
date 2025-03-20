@@ -12,6 +12,7 @@ For the token bridge contracts see [https://github.com/OffchainLabs/token-bridge
 Compile these contracts locally by running
 
 ```bash
+
 git clone https://github.com/offchainlabs/nitro-contracts
 cd nitro-contracts
 yarn install
