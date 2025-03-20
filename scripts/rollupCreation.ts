@@ -291,27 +291,33 @@ async function _getDevRollupConfig(
       throw new Error('Invalid address for batch poster manager')
     }
   }
-
+  const baseStake =
+      process.env.BASE_STAKE !== undefined ? process.env.BASE_STAKE : '1'
+  const loserStakeEscrow =
+      process.env.LOSER_STAKE_ESCROW !== undefined ? process.env.LOSER_STAKE_ESCROW : ethers.constants.AddressZero
   return {
     config: {
       confirmPeriodBlocks: ethers.BigNumber.from('20'),
       extraChallengeTimeBlocks: ethers.BigNumber.from('200'),
       stakeToken: stakeToken,
-      baseStake: ethers.utils.parseEther('1'),
+      baseStake: ethers.utils.parseEther(baseStake),
       wasmModuleRoot: wasmModuleRoot,
       owner: ownerAddress,
-      loserStakeEscrow: ethers.constants.AddressZero,
+      loserStakeEscrow: loserStakeEscrow,
       chainId: JSON.parse(chainConfig)['chainId'],
       chainConfig: chainConfig,
       minimumAssertionPeriod: 75,
       validatorAfkBlocks: 201600,
       genesisAssertionState: {}, // AssertionState
       genesisInboxCount: 0,
-      miniStakeValues: [
-        ethers.utils.parseEther('1'),
-        ethers.utils.parseEther('1'),
-        ethers.utils.parseEther('1'),
-      ],
+      disableValidatorWhitelist: true,
+      proxyAdmins: {
+        outbox: ownerAddress,
+        inbox: ownerAddress,
+        bridge: ownerAddress,
+        rei: ownerAddress,
+        seqInbox: ownerAddress,
+      },
       layerZeroBlockEdgeHeight: 2 ** 5,
       layerZeroBigStepEdgeHeight: 2 ** 5,
       layerZeroSmallStepEdgeHeight: 2 ** 5,
